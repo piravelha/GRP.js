@@ -120,28 +120,28 @@ function _id_Head() {
   let a = _stack.pop();
   _stack.push(a[0]);
 }
-const _id__60_124 = _id_Head;
+const _id__60_42 = _id_Head;
 
 // Tail
 function _id_Tail() {
   let a = _stack.pop();
   _stack.push(a.slice(1));
 }
-const _id__124_62_62 = _id_Tail;
+const _id__42_62_62 = _id_Tail;
 
 // Last
 function _id_Last() {
   let a = _stack.pop();
   _stack.push(a[a.length - 1]);
 }
-const _id__124_62 = _id_Last;
+const _id__42_62 = _id_Last;
 
 // Init
 function _id_Init() {
   let a = _stack.pop();
   _stack.push(a.slice(0, -1));
 }
-const _id__60_60_124 = _id_Init;
+const _id__60_60_42 = _id_Init;
 
 // Cons
 function _id_Cons() {

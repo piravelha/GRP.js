@@ -35,7 +35,7 @@ ifelse: "{" "if" expression "else" expression "}"
 
 while: "while" expression "loop" expression
 
-combinator: "{" (term | splice) (expression | splice)? "}"
+combinator: "{" (identifier | splice) (expression | splice)? "}"
 
 array: "[" (term | number)+ "]" | "[" "]"
 

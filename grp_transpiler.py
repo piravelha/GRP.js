@@ -93,7 +93,7 @@ def compile_combinator(code, *ops):
       elif op.data == "tail_splice":
         s += f"{op.children[0]}.slice(1)"
     elif isinstance(op, Tree) and op.data == "identifier":
-      id = f"_id_{op.children[0]}"
+      id = f"_id_{convert_identifier(op.children[0])}"
       s += f"[{id}]"
     else:
       f = "() => {\n"

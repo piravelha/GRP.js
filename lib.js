@@ -27,17 +27,6 @@ function _invoke(args) {
   f(args);
 }
 
-function _id_Map(F) {
-  let newArr = [];
-  let arr = _stack.pop();
-  for (let i = 0; i < arr.length; i++) {
-    _stack.push(arr[i]);
-    _invoke(F);
-    newArr.push(_stack.pop());
-  }
-  _stack.push(newArr);
-}
-
 // |<<
 function _id_Print() {
   let a = _stack.pop();
@@ -150,3 +139,31 @@ function _id_Cons() {
   _stack.push([b].concat(a));
 }
 const _id__58_62 = _id_Cons;
+
+// Map
+function _id_Map(F) {
+  let newArr = [];
+  let arr = _stack.pop();
+  for (let i = 0; i < arr.length; i++) {
+    _stack.push(arr[i]);
+    _invoke(F);
+    newArr.push(_stack.pop());
+  }
+  _stack.push(newArr);
+}
+const _id__36_62 = _id_Map;
+
+// Filter
+function _id_Filter(F) {
+  let newArr = [];
+  let arr = _stack.pop();
+  for (let i = 0; i < arr.length; i++) {
+    _stack.push(arr[i]);
+    _invoke(F);
+    if (_stack.pop() !== 0) {
+      newArr.push(arr[i]);
+    }
+  }
+  _stack.push(newArr);
+}
+const _id__38_62 = _id_Filter;

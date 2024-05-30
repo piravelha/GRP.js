@@ -27,17 +27,6 @@ function _invoke(args) {
   f(args);
 }
 
-function _id_Map(F) {
-  let newArr = [];
-  let arr = _stack.pop();
-  for (let i = 0; i < arr.length; i++) {
-    _stack.push(arr[i]);
-    _invoke(F);
-    newArr.push(_stack.pop());
-  }
-  _stack.push(newArr);
-}
-
 // |<<
 function _id_Print() {
   let a = _stack.pop();
@@ -120,28 +109,28 @@ function _id_Head() {
   let a = _stack.pop();
   _stack.push(a[0]);
 }
-const _id__60_124 = _id_Head;
+const _id__60_42 = _id_Head;
 
 // Tail
 function _id_Tail() {
   let a = _stack.pop();
   _stack.push(a.slice(1));
 }
-const _id__124_62_62 = _id_Tail;
+const _id__42_62_62 = _id_Tail;
 
 // Last
 function _id_Last() {
   let a = _stack.pop();
   _stack.push(a[a.length - 1]);
 }
-const _id__124_62 = _id_Last;
+const _id__42_62 = _id_Last;
 
 // Init
 function _id_Init() {
   let a = _stack.pop();
   _stack.push(a.slice(0, -1));
 }
-const _id__60_60_124 = _id_Init;
+const _id__60_60_42 = _id_Init;
 
 // Cons
 function _id_Cons() {
@@ -151,53 +140,47 @@ function _id_Cons() {
 }
 const _id__58_62 = _id_Cons;
 
+// Map
+function _id_Map(F) {
+  let newArr = [];
+  let arr = _stack.pop();
+  for (let i = 0; i < arr.length; i++) {
+    _stack.push(arr[i]);
+    _invoke(F);
+    newArr.push(_stack.pop());
+  }
+  _stack.push(newArr);
+}
+const _id__36_62 = _id_Map;
+
+// Filter
 function _id_Filter(F) {
-let _var_0 = _stack.pop();
-function _id_L() {
-_stack.push(typeof _var_0 === "object" ? _var_0.map(x => x) : _var_0);
+  let newArr = [];
+  let arr = _stack.pop();
+  for (let i = 0; i < arr.length; i++) {
+    _stack.push(arr[i]);
+    _invoke(F);
+    if (_stack.pop() !== 0) {
+      newArr.push(arr[i]);
+    }
+  }
+  _stack.push(newArr);
 }
-_id_L();
-let _var_1 = [];
-for (let i = 0; i < 0; i++) {
-_var_1[-1-i] = _stack.pop();
-}
-_stack.push(_var_1);
-_id__61();
-if (_stack.pop()) {
-let _var_2 = [];
-for (let i = 0; i < 0; i++) {
-_var_2[-1-i] = _stack.pop();
-}
-_stack.push(_var_2);
-} else {
-_id_L();
-_id__60_124();
-_invoke([F].flat(5));
-if (_stack.pop()) {
-_id_L();
-_id__60_124();
-_id_L();
-_id__124_62_62();
-_invoke([[_id_Filter], F].flat(5));
-_id__58_62();
-} else {
-_id_L();
-_id__124_62_62();
-_invoke([[_id_Filter], F].flat(5));
-}
-}
-}
-let _var_3 = [];
+const _id__38_62 = _id_Filter;let _var_0 = [];
 _stack.push(1);
 _stack.push(2);
 _stack.push(3);
 _stack.push(4);
 for (let i = 0; i < 4; i++) {
-_var_3[3-i] = _stack.pop();
+_var_0[3-i] = _stack.pop();
 }
-_stack.push(_var_3);
-_invoke([[_id_Filter], [() => {
+_stack.push(_var_0);
+_invoke([[_id__38_62], [() => {
 _stack.push(3);
 _id__60();
+}]].flat(5));
+_invoke([[_id__36_62], [() => {
+_stack.push(1);
+_id__43();
 }]].flat(5));
 _id__60_63();

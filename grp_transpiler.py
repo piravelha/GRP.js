@@ -182,9 +182,14 @@ assert len(sys.argv) == 3, f"Invalid number of arguments provided\n{usage}"
 grp_path = sys.argv[1]
 js_path = sys.argv[2]
 
-with open(grp_path) as f:
-  code = f.read()
-  js_code = compile(code)
+try:
+  with open(grp_path) as f:
+    code = f.read()
+    js_code = compile(code)
+except:
+  with open(".".join(grp_path.split(".")[:-1]) + ".🍇") as f:
+    code = f.read()
+    js_code = compile(code)
 
 with open(js_path, "w") as f:
   f.write(js_code)

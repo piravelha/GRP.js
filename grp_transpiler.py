@@ -1,3 +1,4 @@
+import re
 import sys
 
 from lark import Token, Tree
@@ -166,6 +167,7 @@ def compile_tree(code, tree):
   assert False, f"Not implemented: {tree.data}"
   
 def compile(code):
+  code = re.sub(r";.+", "", code)
   tree = parser.parse(code)
   with open("lib.js") as f:
     lib = f.read()

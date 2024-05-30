@@ -1,0 +1,80 @@
+
+?start: program
+
+program: (declaration | macro)* expression
+
+declaration: identifier "::" expression "::"
+
+data: "data" identifier "::" expression
+
+module: "module" NAME "::" "(" declaration* ")"
+
+macro: "{" identifier splice "}" "::" expression "::"
+
+infix: expression "`" term "`" expression
+
+match: "match" "{" match_case* final_case "}"
+
+match_case: "if" expression "case" expression
+
+final_case: "else" expression
+
+?splice: id_splice
+       | head_splice
+       | tail_splice
+
+id_splice: "~" NAME
+head_splice: "~." NAME
+tail_splice: "~@" NAME
+
+expression: term+
+
+if: "{" "if" expression "}"
+
+ifelse: "{" "if" expression "else" expression "}"
+
+while: "while" expression "loop" expression
+
+combinator: "{" (term | splice) (expression | splice)? "}"
+
+array: "[" (term | number)+ "]" | "[" "]"
+
+set_symbol: ":=" NAME
+
+symbol: ":" NAME
+
+?term: while
+     | infix
+     | combinator
+     | if
+     | ifelse
+     | atom
+
+?atom: identifier
+     | string
+     | character
+     | number
+     | array
+     | set_symbol
+     | symbol
+     | "(" expression ")"
+
+number: NUMBER
+
+string: STRING
+
+character: CHARACTER
+
+identifier: NAME | OPERATOR
+
+OPERATOR: /[+\-*\/!@#$%&;,?\=\|<>_.^][+\-*\/!@#$%;,?\=\|<>_.^:]*|[+\-*\/!@#$%^&:;,?~=<>](?![A-Z=:])[+\-*\/!@#$%^&;,?=~<>]/
+
+NAME: /[A-Z][a-zA-Z0-9\/]*/
+
+CHARACTER: /'[^']'/
+ 
+STRING: /"[^"]*"/
+
+NUMBER: /-?\d+(\.\d+)?/
+
+%ignore /\s+/

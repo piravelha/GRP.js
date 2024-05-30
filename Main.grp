@@ -1,0 +1,12 @@
+
+{Filter ~F} :: :L
+  L [] = {
+    if []
+    else L <| {~F} {
+      if L <| L |>> {Filter ~F} :>
+      else L |>> {Filter ~F}
+    }
+  }
+::
+
+[1 2 3 4] {Filter 3 <} |<<

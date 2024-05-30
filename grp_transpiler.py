@@ -12,7 +12,11 @@ def compile_number(code, value):
 # STRING
 def compile_string(code, value):
   value = value[1:-1]
-  code += f"_stack.push([{",".join([f'"{c}"' for c in value])}]);\n"
+  new = []
+  for c in value:
+    new.append(f'"{c}"')
+  new = ",".join(new)
+  code += f"_stack.push([{new}]);\n"
   return code
 
 # CHARACTER
@@ -186,7 +190,7 @@ try:
   with open(grp_path) as f:
     code = f.read()
     js_code = compile(code)
-except:
+except FileNotFoundError:
   with open(".".join(grp_path.split(".")[:-1]) + ".🍇") as f:
     code = f.read()
     js_code = compile(code)

@@ -2,7 +2,7 @@ _stack = [];
 
 function _eq(a, b) {
   if (typeof a !== "object" || typeof b !== "object") {
-    return a == b;
+    return a == b ? 1 : 0;
   }
   if (a.length !== b.length) {
     return 0;
@@ -13,6 +13,22 @@ function _eq(a, b) {
     }
   }
   return 1;
+}
+
+function _repr(obj) {
+  if (typeof obj !== "object") {
+    return obj.toString();
+  }
+
+  let str = "[";
+  for (let i = 0; i < obj.length; i++) {
+    str += _repr(obj[i]);
+    if (i < obj.length - 1) {
+      str += " ";
+    }
+  }
+
+  return str + "]";
 }
 
 function _invoke(args) {
@@ -27,12 +43,19 @@ function _invoke(args) {
   f(args);
 }
 
-// |<<
+// Print
 function _id_Print() {
   let a = _stack.pop();
-  console.log(a);
+  console.log(_repr(a));
 }
-const _id__60_63 = _id_Print;
+const _id__60_63 = _id_Print; // <?
+
+// .
+function _id__46() {
+  let a = _stack.pop();
+  _stack.push(a);
+  _stack.push(a);
+}
 
 // +
 function _id__43() {
@@ -69,6 +92,21 @@ function _id__37() {
   _stack.push(b % a);
 }
 
+// Signum
+function _id_Signum() {
+  let a = _stack.pop();
+  _stack.push(a > 0 ? 1 : a < 0 ? -1 : 0);
+}
+const _id__94_42 = _id_Signum;
+
+// Max
+function _id_Max() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(a > b ? a : b);
+}
+const _id__61_43_61 = _id_Max;
+
 // <
 function _id__60() {
   let a = _stack.pop();
@@ -103,6 +141,14 @@ function _id__61() {
   let b = _stack.pop();
   _stack.push(_eq(b, a));
 }
+
+// Or
+function _id_Or() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(b !== 0 || a !== 0);
+}
+const _id__124 = _id_Or;
 
 // Head
 function _id_Head() {
@@ -166,21 +212,83 @@ function _id_Filter(F) {
   }
   _stack.push(newArr);
 }
-const _id__38_62 = _id_Filter;let _var_0 = [];
-_stack.push(1);
-_stack.push(2);
-_stack.push(3);
-_stack.push(4);
-for (let i = 0; i < 4; i++) {
-_var_0[3-i] = _stack.pop();
+const _id__38_62 = _id_Filter;
+
+// Reduce
+function _id_Reduce(F) {
+  let result;
+  let arr = _stack.pop();
+  for (let i = 0; i < arr.length; i++) {
+    if (i === 0) {
+      result = arr[i];
+    } else {
+      _stack.push(arr[i]);
+      _stack.push(result);
+      _invoke(F);
+      result = _stack.pop();
+    }
+  }
+  _stack.push(result);
 }
-_stack.push(_var_0);
-_invoke([[_id__38_62], [() => {
-_stack.push(3);
-_id__60();
-}]].flat(5));
+const _id__60_46_62 = _id_Reduce;
+
+// ScanLeft
+function _id_ScanLeft(F) {
+  let arr = _stack.pop();
+  let newArr = [];
+  let acc;
+  for (let i = 0; i < arr.length; i++) {
+    if (i === 0) {
+      acc = arr[i]
+      newArr.push(arr[i])
+    } else {
+      _stack.push(acc);
+      _stack.push(arr[i]);
+      _invoke(F);
+      acc = _stack.pop();
+      newArr.push(acc);
+    }
+  }
+  _stack.push(newArr);
+}
+const _id__60_35 = _id_ScanLeft;
+function _id_MaxParenDepth() {
 _invoke([[_id__36_62], [() => {
+let _var_0 = _stack.pop();
+function _id_C() {
+_stack.push(typeof _var_0 === "object" ? _var_0.map(x => x) : _var_0);
+}
+_id_C();
+_stack.push('(');
+_id__61();
+if (_stack.pop()) {
 _stack.push(1);
+} else {
+_id_C();
+_stack.push(')');
+_id__61();
+if (_stack.pop()) {
+_stack.push(-1);
+} else {
+_stack.push(0);
+}
+}
+}]].flat(5));
+_invoke([[_id__38_62], [() => {
+_id__46();
+_stack.push(1);
+_id__61();
+_stack.push(-1);
+_id__61();
+_id__124();
+}]].flat(5));
+_invoke([[_id__60_35], [() => {
 _id__43();
 }]].flat(5));
-_id__60_63();
+_invoke([[_id__60_46_62], [() => {
+_id_Max();
+}]].flat(5));
+}
+_stack.push(["(","(",")","(","(",")",")",")"]);
+_id_MaxParenDepth();
+_id_Print();

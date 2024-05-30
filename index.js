@@ -50,12 +50,25 @@ function _id_Print() {
 }
 const _id__60_63 = _id_Print; // <?
 
-// .
-function _id__46() {
+// PrintStack
+function _id_PrintStack() {
+  console.log(_repr(_stack));
+}
+const _id__60_63_63_63 = _id_PrintStack; // <???
+
+// Duplicate
+function _id_Duplicate() {
   let a = _stack.pop();
   _stack.push(a);
   _stack.push(a);
 }
+const _id__46 = _id_Duplicate; // .
+
+// Ignore
+function _id_Ignore() {
+  _stack.pop();
+}
+const _id__44 = _id_Ignore; // ,
 
 // +
 function _id__43() {
@@ -97,7 +110,7 @@ function _id_Signum() {
   let a = _stack.pop();
   _stack.push(a > 0 ? 1 : a < 0 ? -1 : 0);
 }
-const _id__94_42 = _id_Signum;
+const _id__94_42 = _id_Signum; // ^*
 
 // Max
 function _id_Max() {
@@ -105,7 +118,14 @@ function _id_Max() {
   let b = _stack.pop();
   _stack.push(a > b ? a : b);
 }
-const _id__61_43_61 = _id_Max;
+const _id__61_43_61 = _id_Max; // =+=
+
+function _id_Min() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(a < b ? a : b);
+}
+const _idd__61_45_61 = _id_Min; // =-=
 
 // <
 function _id__60() {
@@ -142,47 +162,54 @@ function _id__61() {
   _stack.push(_eq(b, a));
 }
 
+// /=
+function _id__47_61() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(!_eq(b, a));
+}
+
 // Or
 function _id_Or() {
   let a = _stack.pop();
   let b = _stack.pop();
   _stack.push(b !== 0 || a !== 0);
 }
-const _id__124 = _id_Or;
+const _id__124 = _id_Or; // |
 
 // Head
 function _id_Head() {
   let a = _stack.pop();
   _stack.push(a[0]);
 }
-const _id__60_42 = _id_Head;
+const _id__60_42 = _id_Head; // <*
 
 // Tail
 function _id_Tail() {
   let a = _stack.pop();
   _stack.push(a.slice(1));
 }
-const _id__42_62_62 = _id_Tail;
+const _id__42_62_62 = _id_Tail; // *>>
 
 // Last
 function _id_Last() {
   let a = _stack.pop();
   _stack.push(a[a.length - 1]);
 }
-const _id__42_62 = _id_Last;
+const _id__42_62 = _id_Last; // *>
 
 // Init
 function _id_Init() {
   let a = _stack.pop();
   _stack.push(a.slice(0, -1));
 }
-const _id__60_60_42 = _id_Init;
+const _id__60_60_42 = _id_Init; // <<*
 
 // Cons
 function _id_Cons() {
   let a = _stack.pop();
   let b = _stack.pop();
-  _stack.push([b].concat(a));
+  _stack.push([b].concat(a)); // :>
 }
 const _id__58_62 = _id_Cons;
 
@@ -197,7 +224,7 @@ function _id_Map(F) {
   }
   _stack.push(newArr);
 }
-const _id__36_62 = _id_Map;
+const _id__36_62 = _id_Map; // $>
 
 // Filter
 function _id_Filter(F) {
@@ -212,7 +239,7 @@ function _id_Filter(F) {
   }
   _stack.push(newArr);
 }
-const _id__38_62 = _id_Filter;
+const _id__38_62 = _id_Filter; // &>
 
 // Reduce
 function _id_Reduce(F) {
@@ -230,7 +257,7 @@ function _id_Reduce(F) {
   }
   _stack.push(result);
 }
-const _id__60_46_62 = _id_Reduce;
+const _id__60_46_62 = _id_Reduce; // <.>
 
 // ScanLeft
 function _id_ScanLeft(F) {
@@ -251,20 +278,16 @@ function _id_ScanLeft(F) {
   }
   _stack.push(newArr);
 }
-const _id__60_35 = _id_ScanLeft;
+const _id__60_64 = _id_ScanLeft; // <@
 function _id_MaxParenDepth() {
 _invoke([[_id__36_62], [() => {
-let _var_0 = _stack.pop();
-function _id_C() {
-_stack.push(typeof _var_0 === "object" ? _var_0.map(x => x) : _var_0);
-}
-_id_C();
+_id__46();
 _stack.push('(');
 _id__61();
 if (_stack.pop()) {
+_id__44();
 _stack.push(1);
 } else {
-_id_C();
 _stack.push(')');
 _id__61();
 if (_stack.pop()) {
@@ -275,20 +298,16 @@ _stack.push(0);
 }
 }]].flat(5));
 _invoke([[_id__38_62], [() => {
-_id__46();
-_stack.push(1);
-_id__61();
-_stack.push(-1);
-_id__61();
-_id__124();
+_stack.push(0);
+_id__47_61();
 }]].flat(5));
-_invoke([[_id__60_35], [() => {
+_invoke([[_id__60_64], [() => {
 _id__43();
 }]].flat(5));
 _invoke([[_id__60_46_62], [() => {
-_id_Max();
+_id__61_43_61();
 }]].flat(5));
 }
-_stack.push(["(","(",")","(","(",")",")",")"]);
+_stack.push(["1","+","(","3","-","(","4","*","6",")","+","(","7","/","(","2","-","3",")",")","-","1",")"]);
 _id_MaxParenDepth();
 _id_Print();

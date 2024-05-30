@@ -43,7 +43,7 @@ function _id_Print() {
   let a = _stack.pop();
   console.log(a);
 }
-const _id__124_60_60 = _id_Print;
+const _id__60_63 = _id_Print;
 
 // +
 function _id__43() {

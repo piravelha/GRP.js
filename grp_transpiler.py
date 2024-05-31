@@ -61,6 +61,17 @@ def compile_array(code, *values):
   code += f"_stack.push({arr});\n"
   return code
 
+# ACCESS
+def compile_access(code, module, method, deep=False):
+  if method.data == "access":
+    method = compile_access("", *method.children, deep=True)
+  else:
+    method = convert_identifier(method.children[0])
+  code += f"_id_{module}()._id_{method}"
+  if not deep:
+    code += "();\n"
+  return code
+
 # SYMBOL
 def compile_symbol(code, name):
   symb = var_count(1)
@@ -70,20 +81,28 @@ def compile_symbol(code, name):
   code += f"}}\n"
   return code
 
-# IF
-def compile_if(code, true_case):
-  code += "if (_stack.pop()) {\n"
-  code = compile_tree(code, true_case)
-  code += "}\n"
-  return code
-
 # IF-ELSE
-def compile_ifelse(code, true_case, false_case):
-  code += "if (_stack.pop()) {\n"
-  code = compile_tree(code, true_case)
-  code += "} else {\n"
-  code = compile_tree(code, false_case)
-  code += "}\n"
+def compile_ifelse(code, true_case, *else_cases):
+  s = "if (_stack.pop()) {\n"
+  s += compile_tree("", true_case)
+  s += "}"
+  elif_cases = []
+  for i, case in enumerate(else_cases):
+    if i == len(else_cases) - 1:
+      else_case = case
+      break
+    if i % 2 == 0:
+      elif_cases.append((case, else_cases[i + 1]))
+  for (cond, case) in elif_cases:
+    cond = compile_tree("", cond)
+    s += f" else if ((() => {{ {cond} return _stack.pop(); }})()) {{\n"
+    s = compile_tree(s, case)
+    s += f"}}"
+    
+  s += f"else {{\n"
+  s = compile_tree(s, else_case)
+  s += f"}}"
+  code += s + "\n"
   return code
 
 # COMBINATOR
@@ -125,6 +144,22 @@ def compile_declaration(code, name, body):
   code += f"}}\n"
   return code
 
+# MODULE
+def compile_module(code, name, *decls):
+  name = f"_id_{name}"
+  s = f"function {name}() {{\n"
+  for dec in decls:
+    s = compile_tree(s, dec)
+  s += "return {\n"
+  for dec in decls:
+    name = dec.children[0]
+    name = f"_id_{name.children[0]}"
+    s += f"{name}: {name},\n"
+  s += "}\n"
+  s += f"}}\n"
+  code += s
+  return code
+
 # MACRO
 def compile_macro(code, name, splice, body):
   name = name.children[0]
@@ -152,10 +187,10 @@ def compile_tree(code, tree):
     return compile_identifier(code, *tree.children)
   if tree.data == "array":
     return compile_array(code, *tree.children)
+  if tree.data == "access":
+    return compile_access(code, *tree.children)
   if tree.data == "symbol":
     return compile_symbol(code, *tree.children)
-  if tree.data == "if":
-    return compile_if(code, *tree.children)
   if tree.data == "ifelse":
     return compile_ifelse(code, *tree.children)
   if tree.data == "combinator":
@@ -164,6 +199,8 @@ def compile_tree(code, tree):
     return compile_expression(code, *tree.children)
   if tree.data == "declaration":
     return compile_declaration(code, *tree.children)
+  if tree.data == "module":
+    return compile_module(code, *tree.children)
   if tree.data == "macro":
     return compile_macro(code, *tree.children)
   if tree.data == "program":
@@ -172,7 +209,10 @@ def compile_tree(code, tree):
   
 def compile(code):
   code = re.sub(r";.+", "", code)
-  tree = parser.parse(code)
+  with open("lib.grp") as f:
+    grplib = f.read()
+  grplib = re.sub(r";.+", "", grplib)
+  tree = parser.parse(grplib + "\n\n" + code)
   with open("lib.js") as f:
     lib = f.read()
   return compile_tree(lib, tree)

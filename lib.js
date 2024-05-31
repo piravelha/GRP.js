@@ -21,11 +21,21 @@ function _repr(obj) {
   }
 
   let str = "[";
+  let allChars = true;
   for (let i = 0; i < obj.length; i++) {
+    if (typeof obj[i] !== "string") allChars = false;
     str += _repr(obj[i]);
     if (i < obj.length - 1) {
       str += " ";
     }
+  }
+
+  if (allChars) {
+    let charStr = "\"";
+    for (let i = 0; i < obj.length; i++) {
+      charStr += obj[i];
+    }
+    return charStr + "\"";
   }
 
   return str + "]";
@@ -212,6 +222,43 @@ function _id_Cons() {
   _stack.push([b].concat(a)); // :>
 }
 const _id__58_62 = _id_Cons;
+
+// Take
+function _id_Take() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(b.slice(0, a));
+}
+
+// !!
+function _id__33_33() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(a[b + 1]);
+}
+
+// Slice
+function _id_Slice() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  let c = _stack.pop();
+  _stack.push(c.slice(b - 1, a))
+}
+
+// Concat
+function _id_Concat() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(b.concat(a));
+}
+const _id__43_43 = _id_Concat;
+
+// Length
+function _id_Length() {
+  let a = _stack.pop();
+  _stack.push(a.length);
+}
+const _id__35 = _id_Length;
 
 // Map
 function _id_Map(F) {

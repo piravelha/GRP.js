@@ -21,11 +21,21 @@ function _repr(obj) {
   }
 
   let str = "[";
+  let allChars = true;
   for (let i = 0; i < obj.length; i++) {
+    if (typeof obj[i] !== "string") allChars = false;
     str += _repr(obj[i]);
     if (i < obj.length - 1) {
       str += " ";
     }
+  }
+
+  if (allChars) {
+    let charStr = "\"";
+    for (let i = 0; i < obj.length; i++) {
+      charStr += obj[i];
+    }
+    return charStr + "\"";
   }
 
   return str + "]";
@@ -213,6 +223,43 @@ function _id_Cons() {
 }
 const _id__58_62 = _id_Cons;
 
+// Take
+function _id_Take() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(b.slice(0, a));
+}
+
+// !!
+function _id__33_33() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(a[b + 1]);
+}
+
+// Slice
+function _id_Slice() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  let c = _stack.pop();
+  _stack.push(c.slice(b - 1, a))
+}
+
+// Concat
+function _id_Concat() {
+  let a = _stack.pop();
+  let b = _stack.pop();
+  _stack.push(b.concat(a));
+}
+const _id__43_43 = _id_Concat;
+
+// Length
+function _id_Length() {
+  let a = _stack.pop();
+  _stack.push(a.length);
+}
+const _id__35 = _id_Length;
+
 // Map
 function _id_Map(F) {
   let newArr = [];
@@ -279,35 +326,174 @@ function _id_ScanLeft(F) {
   _stack.push(newArr);
 }
 const _id__60_64 = _id_ScanLeft; // <@
-function _id_MaxParenDepth() {
-_invoke([[_id__36_62], [() => {
-_id__46();
-_stack.push('(');
-_id__61();
+function _id_Range() {
+let _var_0 = _stack.pop();
+function _id_Max() {
+_stack.push(typeof _var_0 === "object" ? _var_0.map(x => x) : _var_0);
+}
+let _var_1 = _stack.pop();
+function _id_Min() {
+_stack.push(typeof _var_1 === "object" ? _var_1.map(x => x) : _var_1);
+}
+_id_Min();
+_id_Max();
+_id__62();
 if (_stack.pop()) {
-_id__44();
+let _var_2 = [];
+for (let i = 0; i < 0; i++) {
+_var_2[-1-i] = _stack.pop();
+}
+_stack.push(_var_2);
+}else {
+_id_Min();
+_id_Max();
+_id_Min();
 _stack.push(1);
-} else {
-_stack.push(')');
+_id__43();
+_id_Range();
+_id__58_62();
+}
+}
+function _id_Indices() {
+_stack.push(1);
+_id_Range();
+}
+function _id_String() {
+function _id_Split() {
+let _var_3 = _stack.pop();
+function _id_Sep() {
+_stack.push(typeof _var_3 === "object" ? _var_3.map(x => x) : _var_3);
+}
+let _var_4 = _stack.pop();
+function _id_Str() {
+_stack.push(typeof _var_4 === "object" ? _var_4.map(x => x) : _var_4);
+}
+_id_Str();
+_stack.push(2);
+_id_Sep();
+_id__35();
+_stack.push(1);
+_id__43();
+_id_Slice();
+let _var_5 = _stack.pop();
+function _id_Sub() {
+_stack.push(typeof _var_5 === "object" ? _var_5.map(x => x) : _var_5);
+}
+_id_Sep();
+_id_Sub();
 _id__61();
 if (_stack.pop()) {
-_stack.push(-1);
-} else {
-_stack.push(0);
+_id_Str();
+_id_Sep();
+_id__35();
+_stack.push(2);
+_id__43();
+_id_Str();
+_id__35();
+_id_Slice();
+let _var_6 = _stack.pop();
+function _id_Rest() {
+_stack.push(typeof _var_6 === "object" ? _var_6.map(x => x) : _var_6);
 }
+let _var_7 = [];
+_id_Str();
+_id__60_42();
+for (let i = 0; i < 1; i++) {
+_var_7[0-i] = _stack.pop();
 }
-}]].flat(5));
-_invoke([[_id__38_62], [() => {
+_stack.push(_var_7);
+_id_Rest();
+_id_Sep();
+_id_String()._id_Split();
+_id__58_62();
+} else if ((() => { _id_Str();
+_id__35();
 _stack.push(0);
 _id__47_61();
-}]].flat(5));
-_invoke([[_id__60_64], [() => {
-_id__43();
-}]].flat(5));
-_invoke([[_id__60_46_62], [() => {
-_id__61_43_61();
-}]].flat(5));
+ return _stack.pop(); })()) {
+_id_Str();
+_id__42_62_62();
+let _var_8 = _stack.pop();
+function _id_Rest() {
+_stack.push(typeof _var_8 === "object" ? _var_8.map(x => x) : _var_8);
 }
-_stack.push(["1","+","(","3","-","(","4","*","6",")","+","(","7","/","(","2","-","3",")",")","-","1",")"]);
-_id_MaxParenDepth();
-_id_Print();
+_id_Rest();
+_id_Sep();
+_id_String()._id_Split();
+let _var_9 = _stack.pop();
+function _id_Result() {
+_stack.push(typeof _var_9 === "object" ? _var_9.map(x => x) : _var_9);
+}
+_id_Str();
+_id__60_42();
+_id_Result();
+_id__60_42();
+_id__58_62();
+_id_Result();
+_id__42_62_62();
+_id__58_62();
+}else {
+let _var_10 = [];
+let _var_11 = [];
+for (let i = 0; i < 0; i++) {
+_var_11[-1-i] = _stack.pop();
+}
+_stack.push(_var_11);
+for (let i = 0; i < 1; i++) {
+_var_10[0-i] = _stack.pop();
+}
+_stack.push(_var_10);
+}
+}
+function _id_Join() {
+let _var_12 = _stack.pop();
+function _id_Sep() {
+_stack.push(typeof _var_12 === "object" ? _var_12.map(x => x) : _var_12);
+}
+let _var_13 = _stack.pop();
+function _id_Strs() {
+_stack.push(typeof _var_13 === "object" ? _var_13.map(x => x) : _var_13);
+}
+_id_Strs();
+_id__35();
+_stack.push(1);
+_id__61();
+if (_stack.pop()) {
+_id_Strs();
+_id__60_42();
+}else {
+_id_Strs();
+_id__60_42();
+_id_Sep();
+_id__43_43();
+_id_Strs();
+_id__42_62_62();
+_id_Sep();
+_id_Join();
+_id__43_43();
+}
+}
+function _id_Words() {
+_stack.push([" "]);
+_id_String()._id_Split();
+}
+function _id_Unwords() {
+_stack.push([" "]);
+_id_String()._id_Join();
+}
+return {
+_id_Split: _id_Split,
+_id_Join: _id_Join,
+_id_Words: _id_Words,
+_id_Unwords: _id_Unwords,
+}
+}
+function _id_Solve() {
+_id_String()._id_Words();
+_stack.push(4);
+_id_Take();
+_id_String()._id_Unwords();
+}
+_stack.push(["H","e","l","l","o"," ","h","o","w"," ","a","r","e"," ","y","o","u"," "," "," "," ","C","o","n","t","e","s","t","a","n","t"]);
+_id_Solve();
+_id__60_63();

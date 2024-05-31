@@ -1,0 +1,35 @@
+
+Range :: :Max :Min Min Max > {
+  if []
+  else Min (Max Min 1 + Range) :>
+} ::
+
+Indices :: 1 Range ::
+
+module String ::
+  Split :: :Sep :Str
+    Str 2 Sep # 1 + Slice :Sub
+    Sep Sub = {
+      if
+        Str (Sep # 2 +) (Str #) Slice :Rest
+        [(Str <*)] (Rest Sep String/Split) :>
+      {elif Str # 0 /=}
+        Str *>> :Rest
+        (Rest Sep String/Split) :Result
+        Str <* (Result <*) :>
+        Result *>> :>
+      else [[]]
+    }
+  ::
+  Join :: :Sep :Strs
+    Strs # 1 = {
+      if Strs <*
+      else
+        Strs <* Sep ++
+        Strs *>> Sep Join ++
+    }
+  ::
+  Words :: " " String/Split ::
+  Unwords :: " " String/Join ::
+::
+

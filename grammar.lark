@@ -1,13 +1,15 @@
 
 ?start: program
 
-program: (declaration | macro)* expression
+program: (declaration | macro | module)* expression?
 
 declaration: identifier "::" expression "::"
 
 data: "data" identifier "::" expression
 
-module: "module" NAME "::" "(" declaration* ")"
+module: "module" NAME "::" declaration* "::"
+
+access: NAME "/" (identifier | access)
 
 macro: "{" identifier splice "}" "::" expression "::"
 
@@ -29,9 +31,9 @@ tail_splice: "~@" NAME
 
 expression: term+
 
-if: "{" "if" expression "}"
+ifelse: "{" "if" expression (elif expression)* ("else" expression)* "}"
 
-ifelse: "{" "if" expression "else" expression "}"
+?elif: "{" "elif" expression "}"
 
 while: "while" expression "loop" expression
 
@@ -46,11 +48,11 @@ symbol: ":" NAME
 ?term: while
      | infix
      | combinator
-     | if
      | ifelse
      | atom
 
-?atom: identifier
+?atom: access
+     | identifier
      | string
      | character
      | number
@@ -67,9 +69,9 @@ character: CHARACTER
 
 identifier: NAME | OPERATOR
 
-OPERATOR: /[+\*\/!@#$%&;,?\=\|<>_.^][+\-*\/!@#$%;,?\=\|<>_.^:]*|[+*\/!@#$%^&:;,?~=<>](?![A-Z=:])[+\-*\/!@#$%^&;,?=~<>]|[\-](?![0-9])[+\-*\/!@#$%^&;,?=~<>]/
+OPERATOR: /(?<![a-zA-Z])[+\*\/!@#$%&;,?\=\|<>_.^][+\-*\/!@#$%;,?\=\|<>_.^:]*|[+*\/!@#$%^&:;,?~=<>](?![A-Z=:])[+\-*\/!@#$%^&;,?=~<>]*|[\-](?![0-9])((?![a-zA-Z])[+\-*\/!@#$%^&;,?=~<>])*/
 
-NAME: /[A-Z][a-zA-Z0-9\/]*/
+NAME: /[A-Z][a-zA-Z0-9]*/
 
 CHARACTER: /'[^']'/
  
